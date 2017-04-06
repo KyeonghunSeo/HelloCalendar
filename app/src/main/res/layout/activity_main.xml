@@ -7,4 +7,9 @@
     android:layout_height="match_parent"
     tools:context="com.hellowo.fullcalendar.MainActivity">
 
+    <com.hellowo.hellocal.view.HelloCalendarView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </com.hellowo.hellocal.view.HelloCalendarView>
+
 </android.support.constraint.ConstraintLayout>
