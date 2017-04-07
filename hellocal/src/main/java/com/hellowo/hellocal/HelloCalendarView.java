@@ -1,4 +1,4 @@
-package com.hellowo.hellocal.view;
+package com.hellowo.hellocal;
 
 import android.content.Context;
 import android.os.Build;
@@ -58,5 +58,13 @@ public class HelloCalendarView extends FrameLayout {
         width = MeasureSpec.getSize(widthMeasureSpec);
         height = MeasureSpec.getSize(heightMeasureSpec);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    public void nextMonth() {
+        helloCalendar.nextMonth();
+    }
+
+    public void prevMonth() {
+        helloCalendar.prevMonth();
     }
 }
