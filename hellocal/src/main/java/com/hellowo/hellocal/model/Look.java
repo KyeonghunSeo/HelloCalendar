@@ -14,8 +14,7 @@ import com.hellowo.hellocal.utils.ViewUtil;
 class Look {
     Context context;
 
-    enum SideMonthDisplay{Normal, Alpha, Hide}
-    SideMonthDisplay sideMonthDisplay;
+    float sideMonthDisplayAlpha;
     int calendarPadding;
     int calendarBackgroundResource;
     boolean isWeekendColorOn;
@@ -48,8 +47,8 @@ class Look {
 
     int cellBackgroudResource;
 
-    Look(Context context) {
-        this.context = context;
+    Look(HelloCalendar helloCalendar) {
+        this.context = helloCalendar.context;
         init();
     }
 
@@ -57,7 +56,7 @@ class Look {
         /**
          * 캘린더 스타일
          */
-        sideMonthDisplay = SideMonthDisplay.Hide;
+        sideMonthDisplayAlpha = 0.2f;
         calendarPadding = ViewUtil.dpToPx(0, context);
         calendarBackgroundResource = R.color.white;
         isWeekendColorOn = true;
@@ -73,14 +72,14 @@ class Look {
         dayOfWeekTextFont = Typeface.DEFAULT_BOLD;
         dayOfWeekElevation = ViewUtil.dpToPx(1, context);
         dayOfWeekGravity = Gravity.CENTER;
-        dayOfWeekDividerHeight = 2;
+        dayOfWeekDividerHeight = 1;
         dayOfWeekDividerColor = Color.LTGRAY;
 
         /**
          * 라인 스타일
          */
         lineStyle = Look.LineStyle.Color;
-        verticalLineWidth = 0;
+        verticalLineWidth = 1;
         horizontalLineHeight = 1;
         lineColor = Color.LTGRAY;
 

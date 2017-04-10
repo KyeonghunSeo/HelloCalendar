@@ -1,6 +1,7 @@
 package com.hellowo.hellocal.model;
 
 import android.content.Context;
+import android.widget.FrameLayout;
 
 import com.hellowo.hellocal.HelloCalendarView;
 
@@ -12,11 +13,13 @@ public abstract class CalendarModule {
     Canvas canvas;
     Look look;
     HelloCalendarView calendarView;
+    FrameLayout canvasView;
 
     public CalendarModule(HelloCalendar helloCalendar) {
         context = helloCalendar.context;
         canvas = helloCalendar.canvas;
         look = helloCalendar.look;
-        this.calendarView = helloCalendar.calendarView;
+        this.calendarView = helloCalendar.rootView;
+        this.canvasView = helloCalendar.canvasView;
     }
 }

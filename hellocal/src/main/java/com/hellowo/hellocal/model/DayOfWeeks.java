@@ -1,11 +1,18 @@
 package com.hellowo.hellocal.model;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
+import android.util.Log;
 import android.util.TypedValue;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.hellowo.hellocal.model.HelloCalendar.MAX_COLUMNS;
 
@@ -26,11 +33,11 @@ public class DayOfWeeks extends CalendarModule{
     private void createViews() {
         dayOfWeekTexts = new TextView[MAX_COLUMNS];
         divider = new ImageView(context);
-        calendarView.addView(divider);
+        canvasView.addView(divider);
 
         for(int i = 0; i < MAX_COLUMNS; i++) {
             dayOfWeekTexts[i] = new TextView(context);
-            calendarView.addView(dayOfWeekTexts[i]);
+            canvasView.addView(dayOfWeekTexts[i]);
         }
     }
 
@@ -59,26 +66,39 @@ public class DayOfWeeks extends CalendarModule{
         divider.setBackgroundColor(look.dayOfWeekDividerColor);
     }
 
-    void draw() {
-        int width = calendarView.getWidth();
-
-        float deltaX = width / canvas.columns;
-
+    void draw(boolean animation) {
         for(int i = 0; i < MAX_COLUMNS; i++) {
-            TextView dayOfWeekText = dayOfWeekTexts[i];
-            dayOfWeekText.getLayoutParams().width = (int) deltaX;
-            dayOfWeekText.setText(dayOfWeekStrings[((canvas.startDayOfWeek - 1) + i) % MAX_COLUMNS]);
-            dayOfWeekText.setTranslationX(deltaX * i);
+            canvas.drawDayOfWeekText(dayOfWeekTexts[i], i, dayOfWeekStrings);
         }
 
-        divider.setTranslationY(look.dayOfWeekHeight);
-    }
+        if(animation) {
+            final AnimatorSet animSet = new AnimatorSet();
+            List<Animator> animatorList = new ArrayList<>();
 
-    void hide() {
-        for(int i = 0; i < MAX_COLUMNS; i++) {
-            dayOfWeekTexts[i].setVisibility(View.GONE);
+            for(int i = 0; i < MAX_COLUMNS; i++) {
+                animatorList.add(
+                        ObjectAnimator.ofFloat(dayOfWeekTexts[i], "translationY",
+                                dayOfWeekTexts[i].getTranslationY(),
+                                canvas.computeDayOfWeekTextTranslationY())
+                                .setDuration(250)
+                );
+            }
+            animatorList.add(
+                    ObjectAnimator.ofFloat(divider, "translationY",
+                            divider.getTranslationY(),
+                            canvas.computeDeividerTranslationY())
+                            .setDuration(250)
+            );
+
+            animSet.playTogether(animatorList);
+            animSet.setInterpolator(new FastOutSlowInInterpolator());
+            animSet.start();
+
+        }else {
+            for(int i = 0; i < MAX_COLUMNS; i++) {
+                dayOfWeekTexts[i].setTranslationY(canvas.computeDayOfWeekTextTranslationY());
+            }
+            divider.setTranslationY(look.dayOfWeekHeight);
         }
-        
-        divider.setVisibility(View.GONE);
     }
 }

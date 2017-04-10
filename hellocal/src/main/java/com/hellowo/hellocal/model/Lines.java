@@ -1,8 +1,15 @@
 package com.hellowo.hellocal.model;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.hellowo.hellocal.model.HelloCalendar.MAX_COLUMNS;
 import static com.hellowo.hellocal.model.HelloCalendar.MAX_ROWS;
@@ -26,12 +33,12 @@ class Lines extends CalendarModule {
 
         for(int i = 0; i < verticalLineViews.length; i++) {
             verticalLineViews[i] = new ImageView(context);
-            calendarView.addView(verticalLineViews[i]);
+            canvasView.addView(verticalLineViews[i]);
         }
 
         for(int i = 0; i < horizontalLineViews.length; i++) {
             horizontalLineViews[i] = new ImageView(context);
-            calendarView.addView(horizontalLineViews[i]);
+            canvasView.addView(horizontalLineViews[i]);
         }
     }
 
@@ -61,21 +68,45 @@ class Lines extends CalendarModule {
         }
     }
 
-    void draw() {
-        int dayOfWeekOffset = look.isDayOfWeekVisible ? look.dayOfWeekHeight : 0;
-        int width = calendarView.getWidth();
-        int height = calendarView.getHeight() - dayOfWeekOffset;
+    void draw(boolean aniamtion) {
+        if(aniamtion) {
+            final AnimatorSet animSet = new AnimatorSet();
+            List<Animator> animatorList = new ArrayList<>();
 
-        float deltaX = width / canvas.columns;
-        float deltaY = height / canvas.rows;
+            for(int i = 0; i < verticalLineViews.length; i++) {
+                animatorList.add(
+                        ObjectAnimator.ofFloat(verticalLineViews[i], "translationX",
+                                verticalLineViews[i].getTranslationX(),
+                                canvas.computeVerticalLineTranslationX(i))
+                                .setDuration(250)
+                );
+            }
 
-        for(int i = 0; i < verticalLineViews.length; i++) {
-            verticalLineViews[i].setTranslationX(deltaX * (i + 1));
-        }
+            for(int i = 0; i < horizontalLineViews.length; i++) {
+                animatorList.add(
+                        ObjectAnimator.ofFloat(horizontalLineViews[i], "translationY",
+                                horizontalLineViews[i].getTranslationY(),
+                                canvas.computeHorizontalLineTranslationY(i))
+                                .setDuration(250)
+                );
+            }
 
-        for(int i = 0; i < horizontalLineViews.length; i++) {
-            horizontalLineViews[i].setTranslationY(
-                    deltaY * (i + 1) + dayOfWeekOffset);
+            animSet.playTogether(animatorList);
+            animSet.setInterpolator(new FastOutSlowInInterpolator());
+            animSet.start();
+        }else {
+            for(int i = 0; i < verticalLineViews.length; i++) {
+                verticalLineViews[i].setTranslationX(
+                        canvas.computeVerticalLineTranslationX(i)
+                );
+            }
+
+            for(int i = 0; i < horizontalLineViews.length; i++) {
+                horizontalLineViews[i].setTranslationY(
+                        canvas.computeHorizontalLineTranslationY(i)
+                );
+            }
         }
     }
+
 }

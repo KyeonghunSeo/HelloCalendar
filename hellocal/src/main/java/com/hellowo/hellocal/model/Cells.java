@@ -1,5 +1,10 @@
 package com.hellowo.hellocal.model;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.graphics.Color;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +13,9 @@ import android.widget.TextView;
 
 import com.hellowo.hellocal.interfaces.HelloCalendarEventInterface;
 import com.hellowo.hellocal.utils.AnimationUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.hellowo.hellocal.model.HelloCalendar.MAX_COLUMNS;
 import static com.hellowo.hellocal.model.HelloCalendar.MAX_ROWS;
@@ -33,14 +41,14 @@ public class Cells extends CalendarModule  {
 
         for(int i = 0; i < maxCellCount; i++) {
             dateTexts[i] = new TextView(context);
-            calendarView.addView(dateTexts[i]);
+            canvasView.addView(dateTexts[i]);
         }
 
         cells = new View[maxCellCount];
 
         for(int i = 0; i < maxCellCount; i++) {
             cells[i] = new View(context);
-            calendarView.addView(cells[i]);
+            canvasView.addView(cells[i]);
         }
     }
 
@@ -94,29 +102,60 @@ public class Cells extends CalendarModule  {
         }
     }
 
-    void draw() {
-        int dayOfWeekOffset = look.isDayOfWeekVisible ? look.dayOfWeekHeight : 0;
-        int width = calendarView.getWidth();
-        int height = calendarView.getHeight() - dayOfWeekOffset;
-
-        float deltaX = width / canvas.columns;
-        float deltaY = height / canvas.rows;
-
-        int margin = look.textMargin;
-
+    void draw(boolean animation) {
         for(int i = 0; i < cells.length; i++) {
-            TextView dateText = dateTexts[i];
-            dateText.setText(String.valueOf(canvas.dates[i]));
-            dateText.getLayoutParams().width = (int)deltaX;
-            dateText.setTranslationX(deltaX * (i % canvas.columns));
-            dateText.setTranslationY(deltaY * (i / canvas.columns) + margin + dayOfWeekOffset);
+            canvas.drawDateText(dateTexts[i], i);
 
             View cell = cells[i];
-            cell.getLayoutParams().width = (int) deltaX;
-            cell.getLayoutParams().height = (int) deltaY;
-            cell.setTranslationX(deltaX * (i % canvas.columns));
-            cell.setTranslationY(deltaY * (i / canvas.columns) + dayOfWeekOffset);
+            cell.setLayoutParams(new FrameLayout.LayoutParams(
+                    (int) canvas.deltaX, (int) canvas.deltaY));
+            cell.setTranslationX(canvas.computeCellTranslationX(i));
+            cell.setTranslationY(canvas.computeCellTranslationY(i));
+        }
+
+        if(animation) {
+            final AnimatorSet animSet = new AnimatorSet();
+            List<Animator> animatorList = new ArrayList<>();
+
+            for(int i = 0; i < cells.length; i++) {
+                TextView dateText = dateTexts[i];
+
+                animatorList.add(
+                        ObjectAnimator.ofFloat(dateText, "translationX",
+                                dateText.getTranslationX(),
+                                canvas.computeDateTextTranslationX(i))
+                                .setDuration(250)
+                );
+
+                animatorList.add(
+                        ObjectAnimator.ofFloat(dateText, "translationY",
+                                dateText.getTranslationY(),
+                                canvas.computeDateTextTranslationY(i))
+                                .setDuration(250)
+                );
+                /*
+                Animator scaleX = ObjectAnimator.ofFloat(dateText, "scaleX", 0f, 1f)
+                        .setDuration(250);
+                scaleX.setStartDelay(i * 20);
+
+                Animator scaleY = ObjectAnimator.ofFloat(dateText, "scaleY", 0f, 1f)
+                        .setDuration(250);
+                scaleY.setStartDelay(i * 20);
+
+                animatorList.add(scaleX);
+                animatorList.add(scaleY);
+                */
+            }
+
+            animSet.playTogether(animatorList);
+            animSet.setInterpolator(new FastOutSlowInInterpolator());
+            animSet.start();
+        }else {
+            for(int i = 0; i < cells.length; i++) {
+                TextView dateText = dateTexts[i];
+                dateText.setTranslationX(canvas.computeDateTextTranslationX(i));
+                dateText.setTranslationY(canvas.computeDateTextTranslationY(i));
+            }
         }
     }
-
 }
