@@ -1,10 +1,9 @@
-package com.hellowo.hellocal.model;
+package com.hellowo.hellocal;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -14,7 +13,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.hellowo.hellocal.model.HelloCalendar.MAX_COLUMNS;
+import static com.hellowo.hellocal.HelloCalendarView.MAX_COLUMNS;
+
 
 /**
  * Created by Day2Life Android Dev on 2017-04-07
@@ -24,8 +24,8 @@ public class DayOfWeeks extends CalendarModule{
     TextView[] dayOfWeekTexts;
     ImageView divider;
 
-    DayOfWeeks(HelloCalendar helloCalendar) {
-        super(helloCalendar);
+    DayOfWeeks(HelloCalendarView helloCalendarView) {
+        super(helloCalendarView);
         createViews();
         setLayoutParams();
     }
@@ -33,11 +33,11 @@ public class DayOfWeeks extends CalendarModule{
     private void createViews() {
         dayOfWeekTexts = new TextView[MAX_COLUMNS];
         divider = new ImageView(context);
-        canvasView.addView(divider);
+        calendarView.addView(divider);
 
         for(int i = 0; i < MAX_COLUMNS; i++) {
             dayOfWeekTexts[i] = new TextView(context);
-            canvasView.addView(dayOfWeekTexts[i]);
+            calendarView.addView(dayOfWeekTexts[i]);
         }
     }
 

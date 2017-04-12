@@ -1,4 +1,4 @@
-package com.hellowo.hellocal.model;
+package com.hellowo.hellocal;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
@@ -11,8 +11,8 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.hellowo.hellocal.model.HelloCalendar.MAX_COLUMNS;
-import static com.hellowo.hellocal.model.HelloCalendar.MAX_ROWS;
+import static com.hellowo.hellocal.HelloCalendarView.MAX_COLUMNS;
+import static com.hellowo.hellocal.HelloCalendarView.MAX_ROWS;
 
 /**
  * Created by Day2Life Android Dev on 2017-04-06
@@ -21,8 +21,8 @@ class Lines extends CalendarModule {
     private ImageView[] verticalLineViews;
     private ImageView[] horizontalLineViews;
 
-    Lines(HelloCalendar helloCalendar) {
-        super(helloCalendar);
+    Lines(HelloCalendarView helloCalendarView) {
+        super(helloCalendarView);
         createViews();
         setLayoutParams();
     }
@@ -33,12 +33,12 @@ class Lines extends CalendarModule {
 
         for(int i = 0; i < verticalLineViews.length; i++) {
             verticalLineViews[i] = new ImageView(context);
-            canvasView.addView(verticalLineViews[i]);
+            calendarView.addView(verticalLineViews[i]);
         }
 
         for(int i = 0; i < horizontalLineViews.length; i++) {
             horizontalLineViews[i] = new ImageView(context);
-            canvasView.addView(horizontalLineViews[i]);
+            calendarView.addView(horizontalLineViews[i]);
         }
     }
 
@@ -80,6 +80,13 @@ class Lines extends CalendarModule {
                                 canvas.computeVerticalLineTranslationX(i))
                                 .setDuration(250)
                 );
+
+                animatorList.add(
+                        ObjectAnimator.ofFloat(verticalLineViews[i], "translationY",
+                                verticalLineViews[i].getTranslationY(),
+                                canvas.computeVerticalLineTranslationY())
+                                .setDuration(250)
+                );
             }
 
             for(int i = 0; i < horizontalLineViews.length; i++) {
@@ -98,6 +105,9 @@ class Lines extends CalendarModule {
             for(int i = 0; i < verticalLineViews.length; i++) {
                 verticalLineViews[i].setTranslationX(
                         canvas.computeVerticalLineTranslationX(i)
+                );
+                verticalLineViews[i].setTranslationY(
+                        canvas.computeVerticalLineTranslationY()
                 );
             }
 

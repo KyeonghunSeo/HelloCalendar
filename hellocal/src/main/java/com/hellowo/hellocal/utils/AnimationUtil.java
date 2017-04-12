@@ -22,7 +22,7 @@ public class AnimationUtil {
                 ObjectAnimator.ofFloat(view, "scaleY",
                         0.8f, 1f).setDuration(500)
         );
-        animSet.setInterpolator(new OvershootInterpolator(2f));
+        animSet.setInterpolator(new FastOutSlowInInterpolator());
         animSet.start();
     }
 }

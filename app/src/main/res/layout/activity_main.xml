@@ -13,23 +13,27 @@
         android:layout_height="match_parent">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
+            android:text="p"
             android:id="@+id/prev" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
+            android:text="n"
             android:id="@+id/next" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
+            android:text="m"
             android:id="@+id/monthly" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
+            android:text="w"
             android:id="@+id/weekly" />
 
     </LinearLayout>

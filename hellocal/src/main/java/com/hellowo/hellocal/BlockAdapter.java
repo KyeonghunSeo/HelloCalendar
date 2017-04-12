@@ -1,4 +1,4 @@
-package com.hellowo.hellocal.model;
+package com.hellowo.hellocal;
 
 import com.hellowo.hellocal.interfaces.CalendarBlockInterface;
 

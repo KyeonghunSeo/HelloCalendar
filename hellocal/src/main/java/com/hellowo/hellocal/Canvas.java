@@ -1,27 +1,20 @@
-package com.hellowo.hellocal.model;
+package com.hellowo.hellocal;
 
 import android.util.Log;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
-
-import com.hellowo.hellocal.HelloCalendarView;
 
 import java.util.Calendar;
 
-import static com.hellowo.hellocal.model.HelloCalendar.MAX_COLUMNS;
-import static com.hellowo.hellocal.model.HelloCalendar.MAX_ROWS;
+import static com.hellowo.hellocal.HelloCalendarView.MAX_COLUMNS;
+import static com.hellowo.hellocal.HelloCalendarView.MAX_ROWS;
 
 /**
  * Created by Day2Life Android Dev on 2017-04-07
  */
 class Canvas {
     HelloCalendarView calendarView;
-    FrameLayout canvasView;
     Look look;
-
     int rows;
     int columns;
     int startDayOfWeek;
@@ -40,16 +33,15 @@ class Canvas {
     int[] months;
     int[] dates;
 
-    Canvas(HelloCalendar helloCalendar) {
-        this.calendarView = helloCalendar.rootView;
-        this.canvasView = helloCalendar.canvasView;
-        this.look = helloCalendar.look;
+    Canvas(HelloCalendarView helloCalendarView) {
+        this.calendarView = helloCalendarView;
+        this.look = helloCalendarView.look;
         years = new int[MAX_ROWS * MAX_COLUMNS];
         months = new int[MAX_ROWS * MAX_COLUMNS];
         dates = new int[MAX_ROWS * MAX_COLUMNS];
     }
 
-    void calculateCalendarBluePrint(Calendar calendar, HelloCalendar.ViewType viewType) {
+    void calculateCalendarBluePrint(Calendar calendar, HelloCalendarView.ViewType viewType) {
         dayOfWeekOffset = look.isDayOfWeekVisible ? look.dayOfWeekHeight : 0;
         width = calendarView.getWidth() - (look.calendarPadding * 2);
         height = calendarView.getHeight() - (look.calendarPadding * 2) - dayOfWeekOffset;
@@ -93,10 +85,7 @@ class Canvas {
     }
 
     void draw() {
-        canvasView.setLayoutParams(new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, calendarView.getHeight())
-        );
-        canvasView.setPadding(look.calendarPadding, look.calendarPadding,
+        calendarView.setPadding(look.calendarPadding, look.calendarPadding,
                 look.calendarPadding, look.calendarPadding);
     }
 
@@ -125,6 +114,10 @@ class Canvas {
 
     float computeVerticalLineTranslationX(int i) {
         return deltaX * (i + 1);
+    }
+
+    float computeVerticalLineTranslationY() {
+        return dayOfWeekOffset;
     }
 
     float computeHorizontalLineTranslationY(int i) {
@@ -180,5 +173,10 @@ class Canvas {
         }else {
             dateText.setTextColor(look.textColor);
         }
+    }
+
+    void drawBlock(BlockAdapter blockAdapter) {
+        Log.i("aaa", "!!!!!!!!!drawblock");
+
     }
 }

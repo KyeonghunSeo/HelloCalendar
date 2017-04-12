@@ -1,11 +1,10 @@
-package com.hellowo.hellocal.model;
+package com.hellowo.hellocal;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.Gravity;
 
-import com.hellowo.hellocal.R;
 import com.hellowo.hellocal.utils.ViewUtil;
 
 /**
@@ -47,8 +46,8 @@ class Look {
 
     int cellBackgroudResource;
 
-    Look(HelloCalendar helloCalendar) {
-        this.context = helloCalendar.context;
+    Look(HelloCalendarView helloCalendarView) {
+        this.context = helloCalendarView.context;
         init();
     }
 

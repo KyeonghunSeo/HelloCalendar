@@ -1,9 +1,8 @@
-package com.hellowo.hellocal.model;
+package com.hellowo.hellocal;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.graphics.Color;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.util.TypedValue;
 import android.view.View;
@@ -12,13 +11,12 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.hellowo.hellocal.interfaces.HelloCalendarEventInterface;
-import com.hellowo.hellocal.utils.AnimationUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.hellowo.hellocal.model.HelloCalendar.MAX_COLUMNS;
-import static com.hellowo.hellocal.model.HelloCalendar.MAX_ROWS;
+import static com.hellowo.hellocal.HelloCalendarView.MAX_COLUMNS;
+import static com.hellowo.hellocal.HelloCalendarView.MAX_ROWS;
 
 /**
  * Created by Day2Life Android Dev on 2017-04-07
@@ -27,11 +25,11 @@ public class Cells extends CalendarModule  {
     TextView[] dateTexts;
     View[] cells;
 
-    public Cells(HelloCalendar helloCalendar) {
-        super(helloCalendar);
+    public Cells(HelloCalendarView helloCalendarView) {
+        super(helloCalendarView);
         createViews();
         setLayoutParams();
-        setEvents(helloCalendar.eventInterface);
+        setEvents(helloCalendarView.eventInterface);
     }
 
     private void createViews() {
@@ -41,14 +39,14 @@ public class Cells extends CalendarModule  {
 
         for(int i = 0; i < maxCellCount; i++) {
             dateTexts[i] = new TextView(context);
-            canvasView.addView(dateTexts[i]);
+            calendarView.addView(dateTexts[i]);
         }
 
         cells = new View[maxCellCount];
 
         for(int i = 0; i < maxCellCount; i++) {
             cells[i] = new View(context);
-            canvasView.addView(cells[i]);
+            calendarView.addView(cells[i]);
         }
     }
 
